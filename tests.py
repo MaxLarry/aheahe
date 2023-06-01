@@ -2,6 +2,7 @@ import unittest
 import warnings
 from hello_world import app
 
+
 class MyAppTests(unittest.TestCase):
     def setUp(self):
         app.config["TESTING"] = True
@@ -13,12 +14,12 @@ class MyAppTests(unittest.TestCase):
         response = self.app.get("/")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data.decode(), "<p>Hello, World!</p>")
-    
+
     def test_getguest(self):
         response = self.app.get("/guests")
         self.assertEqual(response.status_code, 200)
         self.assertTrue("Larry John" in response.data.decode())
-   
+
     def test_getguest_byId(self):
         response = self.app.get("/guests/10")
         self.assertEqual(response.status_code, 200)
