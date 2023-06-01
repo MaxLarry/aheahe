@@ -22,7 +22,7 @@ def data_fetch(query):
     cur.close()
     return data
 
-
+#authentication
 def auth_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -178,8 +178,6 @@ def delete_guest(id):
     )
 
 # booking and roomtype
-
-
 @app.route("/bookings", methods=["GET"])
 @auth_required
 def get_gbooking():
