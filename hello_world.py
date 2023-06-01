@@ -21,6 +21,7 @@ def data_fetch(query):
 def hello_world():
     return "<p>Hello, World!</p>"
 
+#guest
 @app.route("/guests", methods=["GET"])
 def get_guest():
     data = data_fetch("""select * from guest""")
@@ -29,6 +30,12 @@ def get_guest():
 @app.route("/guests/<int:id>", methods=["GET"])
 def get_guest_byID(id):
     data = data_fetch("""select * from guest Where Guest_Id = {}""".format(id))
+    return make_response(jsonify(data), 200)
+
+
+@app.route("/guests/<string:id>", methods=["GET"])
+def get_guest_bysurname(id):
+    data = data_fetch("""select * from guest Where LastName = {}""".format(id))
     return make_response(jsonify(data), 200)
 
 @app.route("/guests/<int:id>/booking", methods=["GET"])
@@ -75,6 +82,34 @@ def update_guest(id):
     cur.close()
     return make_response(jsonify({"message": "Guest updated successfully", "rows_affected": rows_affected}),200)
 
+
+@app.route("/guests/<int:id>", methods=["DELETE"])
+def delete_guest(id):
+    cur = mysql.connection.cursor()
+    cur.execute(""" DELETE FROM guest where Guest_Id = %s """, (id,))
+    mysql.connection.commit()
+    rows_affected = cur.rowcount
+    cur.close()
+    return make_response(jsonify({"message": "Guest deleted successfully", "rows_affected": rows_affected}),200)
+
+
+@app.route("/actors/format", methods=["GET"])
+def get_params():
+    fmt = request.args.get('id')
+    foo = request.args.get('aaaa')
+    return make_response(jsonify({"format":fmt, "foo":foo}),200)
+
+#booking and roomtype
+
+@app.route("/bookings", methods=["GET"])
+def get_gbooking():
+    data = data_fetch("""select * from booking """)
+    return make_response(jsonify(data), 200)
+
+@app.route("/Room_types", methods=["GET"])
+def get_roomtype():
+    data = data_fetch("""select * from room_type """)
+    return make_response(jsonify(data), 200)
 
 if __name__ == "__main__":
     app.run(debug=True)
